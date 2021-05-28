@@ -51,12 +51,12 @@ public class MainFormController {
 
     public void callOtherStage() {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().
-                getResource("../view/infoForm.fxml")));
+                getResource("..\\view\\infoForm.fxml")));
         try {
             Parent root = loader.load();
             infoFormController = loader.getController();
             this.stage = new Stage();
-            this.stage.setScene(new Scene(root, 669, 567));
+            this.stage.setScene(new Scene(root, 669, 621));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,7 +69,7 @@ public class MainFormController {
         result.append("DANH SACH CAC SENSOR DA RANDOM LA\n");
         result.append(program.printSensors(program.getSensors()));
         result.append("**************************************\n");
-        result.append("DUONG DI NGAN NHAT TU SINK SENSOR DEN TAT CA CAC SENSOR " +
+        result.append("DUONG DI NGAN NHAT TU SINK SENSOR DEN TAT CA CAC\nSENSOR " +
                 "TRONG MANG CO THE GIAO TIEP VOI NO\n");
         for (int i = 1; i < program.getNumberOfSensor(); i++) {
             List<Integer> path = program.getSensors().get(i).getShortestPath();
@@ -86,7 +86,7 @@ public class MainFormController {
         Stage stage = (Stage) ap.getScene().getWindow();
         FileChooser fc = new FileChooser();
         fc.setTitle("Choose a data set");
-        fc.setInitialDirectory(new File(System.getProperty("user.home"), "datasets"));
+        fc.setInitialDirectory(new File(System.getProperty("user.dir"), "src\\com\\nhom7\\datasets"));
         File file = fc.showOpenDialog(stage);
         if (file != null) {
             String fullPath = file.getAbsolutePath();

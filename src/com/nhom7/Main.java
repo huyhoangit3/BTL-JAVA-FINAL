@@ -12,8 +12,9 @@ import java.util.Objects;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
+        // load resoure file.
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().
-                getResource("view/mainForm.fxml")));
+                getResource("view\\mainForm.fxml")));
         Scene scene = new Scene(root, 600, 400);
         primaryStage.setScene(scene);
         primaryStage.show();

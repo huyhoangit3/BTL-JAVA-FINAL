@@ -82,7 +82,7 @@ class Program:
 
         while len(queue) != 0:
             u = queue.pop(0)
-            neighbors = self.sensor_list[u].near_neighbors;
+            neighbors = self.sensor_list[u].near_neighbors
             for neighbor in neighbors:
                 if visited[neighbor] == False:
                     visited[neighbor] = True
@@ -95,12 +95,7 @@ class Program:
 
     def draw(self, xlim, ylim, mode):
         # fill color in Circle
-        cmap = cm.jet   # Select colormap U want
-        """ # Declare for set range of value for normalization
-        vmin = 0
-        vmax = 1
-        # Normalize value for cmap
-        norm = Normalize(vmin, vmax) """
+        cmap = cm.jet   # Select colormap
         # danh sách các tọa độ x
         x_values = list()
         # danh sách các tọa độ y
@@ -140,11 +135,10 @@ class Program:
                         if sensor == self.sensor_list[mode]:
                             drawing_group_circle.append(plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#ffd60a'))
                         else:
-                            drawing_group_circle.append(plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#ffafcc'))
+                            drawing_group_circle.insert(0, plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#ffafcc'))
                     else:
                         drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#b7b7a4')
-                    drawing_circle_list.append(drawing_circle)
-                    # here
+                        drawing_circle_list.append(drawing_circle)
             for s in active_sensors:
                 x_values.append(self.sensor_list[s].coordinate.x)
                 y_values.append(self.sensor_list[s].coordinate.y)

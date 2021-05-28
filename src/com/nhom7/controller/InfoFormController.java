@@ -42,9 +42,11 @@ public class InfoFormController {
     public void writeToFile() {
         Stage stage = (Stage) ap1.getScene().getWindow();
         FileChooser fc = new FileChooser();
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text doc(*.txt)", "*.txt"));
+        fc.setInitialFileName("*.txt");
         fc.setTitle("Save file");
-        fc.setInitialDirectory(new File(System.getProperty("user.home"),
-                "datasets"));
+        fc.setInitialDirectory(new File(System.getProperty("user.dir"),
+                "src\\com\\nhom7\\datasets"));
         File file = fc.showSaveDialog(stage);
         if (file != null) {
             program.writeToFile(file.getAbsolutePath());
@@ -55,7 +57,7 @@ public class InfoFormController {
     public void draw() {
         Runtime runtime = Runtime.getRuntime();
         try {
-            runtime.exec("python3 src/com/nhom7/python_scripts/Main.py " + this.filePath + " 0");
+            runtime.exec("python src\\com\\nhom7\\python_scripts\\Main.py " + this.filePath + " 0");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,7 +66,7 @@ public class InfoFormController {
         String index = activeSensor.getValue().toString();
         Runtime runtime = Runtime.getRuntime();
         try {
-            runtime.exec("python3 src/com/nhom7/python_scripts/Main.py " + this.filePath + " " + index);
+            runtime.exec("python src\\com\\nhom7\\python_scripts\\Main.py " + this.filePath + " " + index);
         } catch (IOException e) {
             e.printStackTrace();
         }

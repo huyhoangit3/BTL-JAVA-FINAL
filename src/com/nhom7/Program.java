@@ -9,33 +9,43 @@ import java.util.List;
 import java.util.*;
 
 public class Program {
+    // number of sensor, length and with of considering area.
     private int numberOfSensor, lengthOfArea, widthOfArea;
+    // list of sensors in network.
     private List<Sensor> sensors;
-
+    //constructor non-args
     public Program() {
         this.numberOfSensor = 0;
         this.lengthOfArea = 0;
         this.widthOfArea = 0;
         this.sensors = new ArrayList<>();
     }
-
+    // init data for per sensor in network.
     public void loadData() {
         findAllNeighbors();
         findAllShortestPath();
     }
 
+    // This method is used to random sensors.
     public void randSensors() {
+        // initialize sink sensor.
         Sensor sinkSensor = new Sensor();
+        // set coordinate for sink sensor.
         sinkSensor.setCoordinate(new Point(lengthOfArea / 2, widthOfArea / 2));
+        // add sink sensor to sensor list.
         this.sensors.add(sinkSensor);
 
+        // index of sensor.
         int pos = 1;
         Random rand = new Random();
         while (pos <= numberOfSensor) {
+            // initialize per sensor.
             Sensor sensor = new Sensor();
+            // set index and coordinate for per sensor.
             sensor.setIndex(pos);
             sensor.setCoordinate(new Point(rand.nextInt(this.lengthOfArea + 1),
                     rand.nextInt(this.widthOfArea + 1)));
+            // make sure not have duplicate sensor in network.
             if (!this.sensors.contains(sensor)) {
                 this.sensors.add(sensor);
                 pos++;
@@ -43,7 +53,12 @@ public class Program {
         }
     }
 
+    /**
+     * This method is used to find neighbors of sensor source.
+     * @param source - sensor want to find neighbors sensor.
+     */
     public void findNeighbors(Sensor source) {
+        // traverse sensor list.
         for (Sensor sensor : this.sensors) {
             if (!source.equals(sensor) && source.distanceToOther(sensor) <= 2 * Sensor.getRadius()) {
                 source.getNearNeighbors().add(sensor.getIndex());
@@ -51,26 +66,34 @@ public class Program {
         }
     }
 
+    // find all neighbors for all sensor in network.
     public void findAllNeighbors() {
         for (Sensor sensor : this.sensors) {
             findNeighbors(sensor);
         }
     }
 
+    // find all shortest path for all sensor that have path to sink sensor.
     public void findAllShortestPath() {
-        for (int i = 1; i < this.numberOfSensor; i++) {
+        for (int i = 1; i < this.sensors.size(); i++) {
             this.sensors.get(i).setShortestPath(findShortestPath(0, i));
         }
     }
 
-    public List<Integer> findShortestPath(int s, int dest) {
+    /**
+     * This method is used to find shortest path from source to destination sensor.
+     * @param source - index of start sensor.
+     * @param dest - index of destination sensor.
+     * @return path from source to destination.
+     */
+    public List<Integer> findShortestPath(int source, int dest) {
         // predecessor[i] array stores predecessor of
         // i and distance array stores distance of i
-        // from s
+        // from source
         int[] pred = new int[this.sensors.size()];
         int[] dist = new int[this.sensors.size()];
 
-        if (!BFS(s, dest, pred, dist)) {
+        if (!BFS(source, dest, pred, dist)) {
             return null;
         }
 
@@ -82,10 +105,19 @@ public class Program {
             path.add(pred[crawl]);
             crawl = pred[crawl];
         }
+        // reverse path list.
         Collections.reverse(path);
         return path;
     }
 
+    /**
+     * This method implement Breadth First Search(BFS) algorithm.
+     * @param src - index of start sensor.
+     * @param dest - index of destination sensor.
+     * @param pred - array store predecessors.
+     * @param dist - array store distance from src to dest.
+     * @return
+     */
     public boolean BFS(int src, int dest, int[] pred, int[] dist) {
         // a queue to maintain queue of vertices whose
         // adjacency list is to be scanned as per normal
@@ -106,13 +138,11 @@ public class Program {
             dist[i] = Integer.MAX_VALUE;
             pred[i] = -1;
         }
-
         // now source is first to be visited and
         // distance from source to itself should be 0
         visited[src] = true;
         dist[src] = 0;
         queue.add(src);
-
         // bfs Algorithm
         while (!queue.isEmpty()) {
             int u = queue.remove();
@@ -123,7 +153,6 @@ public class Program {
                     dist[neighbor] = dist[u] + 1;
                     pred[neighbor] = u;
                     queue.add(neighbor);
-
                     // stopping condition (when we find
                     // our destination)
                     if (neighbor == dest)
@@ -134,6 +163,10 @@ public class Program {
         return false;
     }
 
+    /**
+     * This method is used to read data from file and load it into sensor list.
+     * @param filePath - file name will be read.
+     */
     public void readFromFile(String filePath) {
         FileInputStream fileInputStream = null;
         Scanner sc = null;
@@ -183,6 +216,10 @@ public class Program {
         }
     }
 
+    /**
+     * This method is used to write data of this network to file.
+     * @param filePath - file name will be write.
+     */
     public void writeToFile(String filePath) {
         FileWriter fileWriter = null;
         try {
@@ -192,7 +229,8 @@ public class Program {
             // write information about considering area to file.
             fileWriter.write(areaInfo);
             for (Sensor sensor : this.sensors) {
-                // information about per sensor includes x-point, y-point, index, radius.
+                // information about per sensor includes x-point, y-point, index, radius
+                // seperate by comma.
                 String line = (int) sensor.getCoordinate().getX() + "," +
                         (int) sensor.getCoordinate().getY() + "," + sensor.getIndex() +
                         "," + Sensor.getRadius() + "\n";
@@ -211,6 +249,7 @@ public class Program {
         }
     }
 
+    // return String include information about sensor list.
     public String printSensors(Iterable<Sensor> sensorList) {
         StringBuilder result = new StringBuilder();
         for (Sensor sensor : sensorList) {
@@ -221,6 +260,7 @@ public class Program {
         return result.toString();
     }
 
+    // getter and setter.
     public void setNumberOfSensor(int numberOfSensor) {
         this.numberOfSensor = numberOfSensor;
     }
