@@ -93,15 +93,14 @@ class Program:
                         return True
         return False
 
-    def draw(self, xlim, ylim):
+    def draw(self, xlim, ylim, mode):
         # fill color in Circle
         cmap = cm.jet   # Select colormap U want
-        # Declare for set range of value for normalization
-        vmin = 0 
+        """ # Declare for set range of value for normalization
+        vmin = 0
         vmax = 1
         # Normalize value for cmap
-        norm = Normalize(vmin, vmax)
-
+        norm = Normalize(vmin, vmax) """
         # danh sách các tọa độ x
         x_values = list()
         # danh sách các tọa độ y
@@ -113,26 +112,49 @@ class Program:
         drawing_circle_list = list()
         drawing_sink_circle = None
 
-        for i in range(len(self.sensor_list)):
+        if mode == 0:
+            for i in range(len(self.sensor_list)):
             # nếu sensor có đường đi tới sink sensor
             # thì set màu cho sensor đó
-            sensor = self.sensor_list[i]
-            if i == 0:
-                drawing_sink_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color=cmap(norm(0.7)))
-            else:
-                if sensor.shortest_path != None:
-                    drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color=cmap(norm(0.5)))
+                sensor = self.sensor_list[i]
+                if i == 0:
+                    drawing_sink_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#fb8500')
                 else:
-                    drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color=cmap(norm(0.3)))
-                drawing_circle_list.append(drawing_circle)
-                x_values.append(sensor.coordinate.x)
-                y_values.append(sensor.coordinate.y)
-                labels.append(sensor.index)
+                    if sensor.shortest_path != None:
+                        drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#ffafcc')
+                    else:
+                        drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#b7b7a4')
+                    drawing_circle_list.append(drawing_circle)
+                    x_values.append(sensor.coordinate.x)
+                    y_values.append(sensor.coordinate.y)
+                    labels.append(sensor.index)
+        else:
+            active_sensors = self.sensor_list[mode].shortest_path
+            drawing_group_circle = list()
+            for i in range(len(self.sensor_list)):
+                sensor = self.sensor_list[i]
+                if i == 0:
+                    drawing_sink_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#fb8500')
+                else:
+                    if sensor.index in active_sensors:
+                        if sensor == self.sensor_list[mode]:
+                            drawing_group_circle.append(plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#ffd60a'))
+                        else:
+                            drawing_group_circle.append(plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#ffafcc'))
+                    else:
+                        drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#b7b7a4')
+                    drawing_circle_list.append(drawing_circle)
+                    # here
+            for s in active_sensors:
+                x_values.append(self.sensor_list[s].coordinate.x)
+                y_values.append(self.sensor_list[s].coordinate.y)
+                labels.append(self.sensor_list[s].index)
+            drawing_circle_list.extend(drawing_group_circle)
+
         drawing_circle_list.append(drawing_sink_circle)
         x_values.append(self.sensor_list[0].coordinate.x)
         y_values.append(self.sensor_list[0].coordinate.y)
         labels.append(self.sensor_list[0].index)
-
 
         # danh sách các điểm để vẽ
         x_points = np.array(x_values)
@@ -142,7 +164,6 @@ class Program:
         axes.scatter(x_points, y_points)
         axes.set_aspect(1)
 
-        
         for i in drawing_circle_list:
             # vẽ danh sách các sensor đã random
             axes.add_artist(i)
@@ -152,7 +173,7 @@ class Program:
             axes.annotate(txt, (x_points[i], y_points[i]))
 
         # vẽ các điểm ứng với các tọa độ các sensor đã random không có đường nối
-        plt.plot(x_points, y_points, "o")
+        plt.plot(x_points, y_points, ".")
         # set giá trị limit cho trục x và y
         plt.xlim([0, xlim])
         plt.ylim([0, ylim])

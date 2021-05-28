@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,6 +46,7 @@ public class MainFormController {
         this.stage.show();
         printInfo();
         infoFormController.setProgram(program);
+        infoFormController.setDataComboBox(getActiveSensors());
     }
 
     public void callOtherStage() {
@@ -96,7 +98,18 @@ public class MainFormController {
             printInfo();
             infoFormController.setProgram(program);
             infoFormController.setFilePath(fullPath);
+            infoFormController.setDataComboBox(getActiveSensors());
         }
+    }
+    public List<Integer> getActiveSensors() {
+        List<Integer> activeSensors = new ArrayList<>();
+        for (Sensor sensor : program.getSensors()) {
+            if (sensor.getShortestPath() != null) {
+                activeSensors.add(sensor.getIndex());
+            }
+        }
+        activeSensors.remove(0);
+        return activeSensors;
     }
 
     public void closeForm(ActionEvent event) {
