@@ -73,9 +73,9 @@ class Program:
         queue = list()
         visited = [None] * len(self.sensor_list)
         for i in range(len(self.sensor_list)):
-            visited[i] = False;
+            visited[i] = False
             dist[i] = sys.float_info.max
-            pred[i] = -1;
+            pred[i] = -1
         visited[sour] = True
         dist[sour] = 0
         queue.append(sour)
@@ -111,23 +111,27 @@ class Program:
 
         # vẽ danh sách các sensor
         drawing_circle_list = list()
+        drawing_sink_circle = None
 
         for i in range(len(self.sensor_list)):
             # nếu sensor có đường đi tới sink sensor
             # thì set màu cho sensor đó
             sensor = self.sensor_list[i]
             if i == 0:
-                drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color=cmap(norm(0.7)))
+                drawing_sink_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color=cmap(norm(0.7)))
             else:
                 if sensor.shortest_path != None:
                     drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color=cmap(norm(0.5)))
                 else:
                     drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color=cmap(norm(0.3)))
-            drawing_circle_list.append(drawing_circle)
-
-            x_values.append(sensor.coordinate.x)
-            y_values.append(sensor.coordinate.y)
-            labels.append(sensor.index)
+                drawing_circle_list.append(drawing_circle)
+                x_values.append(sensor.coordinate.x)
+                y_values.append(sensor.coordinate.y)
+                labels.append(sensor.index)
+        drawing_circle_list.append(drawing_sink_circle)
+        x_values.append(self.sensor_list[0].coordinate.x)
+        y_values.append(self.sensor_list[0].coordinate.y)
+        labels.append(self.sensor_list[0].index)
 
 
         # danh sách các điểm để vẽ

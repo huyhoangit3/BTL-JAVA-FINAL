@@ -30,6 +30,7 @@ public class InfoFormController {
         this.content.setStyle("-fx-font-size: 18");
         this.content.setEditable(false);
     }
+
     public void writeToFile() {
         Stage stage = (Stage) ap1.getScene().getWindow();
         FileChooser fc = new FileChooser();
@@ -42,6 +43,7 @@ public class InfoFormController {
             this.filePath = file.getAbsolutePath();
         }
     }
+
     public void draw() {
         System.out.println(this.filePath);
         Runtime runtime = Runtime.getRuntime();
@@ -55,6 +57,7 @@ public class InfoFormController {
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
+
     public void closeInfoForm(ActionEvent event) {
         ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
     }

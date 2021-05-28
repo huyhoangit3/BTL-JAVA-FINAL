@@ -18,6 +18,7 @@ public class Sensor {
         this.nearNeighbors = new ArrayList<>();
         this.shortestPath = new ArrayList<>();
     }
+
     public double distanceToOther(Sensor other) {
         return Math.sqrt(Math.pow(this.coordinate.getX() -
                 other.coordinate.getX(), 2) +

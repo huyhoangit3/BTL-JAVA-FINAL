@@ -62,6 +62,7 @@ public class Program {
             this.sensors.get(i).setShortestPath(findShortestPath(0, i));
         }
     }
+
     public List<Integer> findShortestPath(int s, int dest) {
         // predecessor[i] array stores predecessor of
         // i and distance array stores distance of i
@@ -209,6 +210,7 @@ public class Program {
             }
         }
     }
+
     public String printSensors(Iterable<Sensor> sensorList) {
         StringBuilder result = new StringBuilder();
         for (Sensor sensor : sensorList) {
