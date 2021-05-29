@@ -124,7 +124,8 @@ public class MainFormController {
                 activeSensors.add(sensor.getIndex());
             }
         }
-        activeSensors.remove(0);
+        if(!activeSensors.isEmpty())
+            activeSensors.remove(0);
         return activeSensors;
     }
 

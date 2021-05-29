@@ -4,10 +4,7 @@ import com.nhom7.Program;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -63,12 +60,21 @@ public class InfoFormController {
 
     // method will be invoke when draw button clicked.
     public void draw() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            runtime.exec("python src\\com\\nhom7\\python_scripts\\Main.py " + this.filePath + " 0");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (filePath != null) {
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                runtime.exec("python src\\com\\nhom7\\python_scripts\\Main.py " + this.filePath + " 0");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please write to file first!");
+            alert.show();
         }
+
     }
     // get data from combobox.
     public void valueChange() {

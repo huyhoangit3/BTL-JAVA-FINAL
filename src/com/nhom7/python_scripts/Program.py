@@ -1,11 +1,9 @@
 from Sensor import Sensor
 import random
 import sys
-
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.axes_grid1 import Divider, Size
-
 
 class Program:
     # hàm tạo

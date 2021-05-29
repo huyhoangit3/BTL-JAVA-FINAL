@@ -38,7 +38,7 @@ public class Program {
         // index of sensor.
         int pos = 1;
         Random rand = new Random();
-        while (pos <= numberOfSensor) {
+        while (pos < numberOfSensor) {
             // initialize per sensor.
             Sensor sensor = new Sensor();
             // set index and coordinate for per sensor.
