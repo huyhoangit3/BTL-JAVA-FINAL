@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -22,6 +23,8 @@ public class InfoFormController {
     public ComboBox<Integer> activeSensor;
     @FXML
     public AnchorPane ap1;
+    @FXML
+    private Label numberOfActiveSensor;
     private Program program;
     private String filePath;
 
@@ -35,10 +38,14 @@ public class InfoFormController {
         this.content.setStyle("-fx-font-size: 18");
         this.content.setEditable(false);
     }
+    public void setNumberOfActiveSensor(String text) {
+        this.numberOfActiveSensor.setText(text);
+    }
     public void setDataComboBox(List<Integer> activeSens) {
         this.activeSensor.setItems(FXCollections.observableList(activeSens));
     }
 
+    // method will be invoke when write to file button clicked.
     public void writeToFile() {
         Stage stage = (Stage) ap1.getScene().getWindow();
         FileChooser fc = new FileChooser();
@@ -54,6 +61,7 @@ public class InfoFormController {
         }
     }
 
+    // method will be invoke when draw button clicked.
     public void draw() {
         Runtime runtime = Runtime.getRuntime();
         try {
@@ -62,6 +70,7 @@ public class InfoFormController {
             e.printStackTrace();
         }
     }
+    // get data from combobox.
     public void valueChange() {
         String index = activeSensor.getValue().toString();
         Runtime runtime = Runtime.getRuntime();

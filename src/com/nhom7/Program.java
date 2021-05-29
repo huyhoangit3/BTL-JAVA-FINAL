@@ -75,7 +75,7 @@ public class Program {
 
     // find all shortest path for all sensor that have path to sink sensor.
     public void findAllShortestPath() {
-        for (int i = 1; i < this.sensors.size(); i++) {
+        for (int i = 1; i < this.numberOfSensor; i++) {
             this.sensors.get(i).setShortestPath(findShortestPath(0, i));
         }
     }
@@ -116,7 +116,7 @@ public class Program {
      * @param dest - index of destination sensor.
      * @param pred - array store predecessors.
      * @param dist - array store distance from src to dest.
-     * @return
+     * @return shortest path from source to destination.
      */
     public boolean BFS(int src, int dest, int[] pred, int[] dist) {
         // a queue to maintain queue of vertices whose
@@ -155,7 +155,7 @@ public class Program {
                     queue.add(neighbor);
                     // stopping condition (when we find
                     // our destination)
-                    if (neighbor == dest)
+                    if (neighbor.equals(dest))
                         return true;
                 }
             }

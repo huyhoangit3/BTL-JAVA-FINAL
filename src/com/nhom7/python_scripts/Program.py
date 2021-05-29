@@ -4,8 +4,7 @@ import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.cm as cm
-from matplotlib.colors import Normalize
+from mpl_toolkits.axes_grid1 import Divider, Size
 
 
 class Program:
@@ -93,9 +92,7 @@ class Program:
                         return True
         return False
 
-    def draw(self, xlim, ylim, mode):
-        # fill color in Circle
-        cmap = cm.jet   # Select colormap
+    def get_data_figure(self, xlim, ylim, mode):
         # danh sách các tọa độ x
         x_values = list()
         # danh sách các tọa độ y
@@ -109,14 +106,12 @@ class Program:
 
         if mode == 0:
             for i in range(len(self.sensor_list)):
-            # nếu sensor có đường đi tới sink sensor
-            # thì set màu cho sensor đó
                 sensor = self.sensor_list[i]
                 if i == 0:
                     drawing_sink_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#fb8500')
                 else:
                     if sensor.shortest_path != None:
-                        drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#ffafcc')
+                        drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#54e346')
                     else:
                         drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#b7b7a4')
                     drawing_circle_list.append(drawing_circle)
@@ -135,7 +130,7 @@ class Program:
                         if sensor == self.sensor_list[mode]:
                             drawing_group_circle.append(plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#ffd60a'))
                         else:
-                            drawing_group_circle.insert(0, plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#ffafcc'))
+                            drawing_group_circle.insert(0, plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#54e346'))
                     else:
                         drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#b7b7a4')
                         drawing_circle_list.append(drawing_circle)
@@ -154,7 +149,21 @@ class Program:
         x_points = np.array(x_values)
         y_points = np.array(y_values)
 
-        figure, axes = plt.subplots()
+        return [x_points, y_points, labels, drawing_circle_list]
+
+    def draw(self, xlim, ylim, mode):
+        x_points, y_points, labels, drawing_circle_list = self.get_data_figure(xlim, ylim, mode)
+        figure = plt.figure(figsize=(8, 6.3))
+        # The first items are for padding and the second items are for the axes.
+        # sizes are in inch.
+        h = [Size.Fixed(0.2), Size.Fixed(7.8)]
+        v = [Size.Fixed(0.3), Size.Fixed(5.9)]
+
+        divider = Divider(figure, (0, 0, 1, 1), h, v, aspect=False)
+        # The width and height of the rectangle are ignored.
+
+        axes = figure.add_axes(divider.get_position(),
+                          axes_locator=divider.new_locator(nx=1, ny=1))
         axes.scatter(x_points, y_points)
         axes.set_aspect(1)
 
