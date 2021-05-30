@@ -8,8 +8,9 @@ def main():
     program.read_file(file_path)
     program.init_data()
     program.draw(length, width, mode)
-
+# ham doc file
 def load_data():
+    # danh sach tham so truyen qua dong lenh.
     arguments = sys.argv
     file_path = arguments[1]
     mode = arguments[2]
@@ -24,6 +25,7 @@ def load_data():
         width = int(result[1])
         break
     file.close()
+    # tra ve chieu dai, chieu rong, ten file se doc va mode ve.
     return [length, width, file_path, mode]
 
 if __name__ == "__main__":
