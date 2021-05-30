@@ -15,15 +15,18 @@ public class Sensor {
     private static int radius = 10;
     // position (Oxy) of sensor in considering area.
     private Point coordinate;
+    // traversal state
+    private boolean visited;
     // list of neighbors sensor (connected sensor).
-    private List<Integer> nearNeighbors;
+    private List<Sensor> nearNeighbors;
     // list of sensors make shortest path to sink sensor.
-    private List<Integer> shortestPath;
+    private List<Sensor> shortestPath;
 
     // constructor non-args
     public Sensor() {
         this.index = 0;
         this.coordinate = new Point();
+        this.visited = false;
         this.nearNeighbors = new ArrayList<>();
         this.shortestPath = new ArrayList<>();
     }
@@ -52,7 +55,7 @@ public class Sensor {
 
     @Override
     public int hashCode() {
-        return Objects.hash(index, coordinate);
+        return Objects.hash(index, visited, coordinate);
     }
 
     // getter and setter method
@@ -80,19 +83,28 @@ public class Sensor {
         this.coordinate = coordinate;
     }
 
-    public List<Integer> getNearNeighbors() {
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+    public List<Sensor> getNearNeighbors() {
         return nearNeighbors;
     }
 
-    public void setNearNeighbors(List<Integer> nearNeighbors) {
+    public void setNearNeighbors(List<Sensor> nearNeighbors) {
         this.nearNeighbors = nearNeighbors;
     }
 
-    public List<Integer> getShortestPath() {
+    public List<Sensor> getShortestPath() {
         return shortestPath;
     }
 
-    public void setShortestPath(List<Integer> shortestPath) {
+    public void setShortestPath(List<Sensor> shortestPath) {
         this.shortestPath = shortestPath;
     }
 }
+

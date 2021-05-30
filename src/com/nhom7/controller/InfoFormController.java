@@ -35,9 +35,11 @@ public class InfoFormController {
         this.content.setStyle("-fx-font-size: 18");
         this.content.setEditable(false);
     }
+
     public void setNumberOfActiveSensor(String text) {
         this.numberOfActiveSensor.setText(text);
     }
+
     public void setDataComboBox(List<Integer> activeSens) {
         this.activeSensor.setItems(FXCollections.observableList(activeSens));
     }
@@ -76,6 +78,7 @@ public class InfoFormController {
         }
 
     }
+
     // get data from combobox.
     public void valueChange() {
         String index = activeSensor.getValue().toString();

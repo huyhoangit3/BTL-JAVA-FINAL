@@ -8,6 +8,8 @@ class Sensor:
 		self.radius = 0
         # tọa độ Oxy của sensor
 		self.coordinate = Point()
+		# trạng thái duyệt của sensor.
+		self.visited = False
         # danh sách các sensor gần nó
 		self.near_neighbors = list()
         # đường đi ngắn nhất từ sink sensor đến mỗi sensor
@@ -19,7 +21,7 @@ class Sensor:
 
     # make Sensor object hashable
 	def __hash__(self):
-		return hash((self.index,self.coordinate))
+		return hash((self.index,self.visited, self.coordinate))
     # 
 	def distance_to_other(self, other):
 		return math.sqrt(pow(self.coordinate.x - other.coordinate.x, 2) +

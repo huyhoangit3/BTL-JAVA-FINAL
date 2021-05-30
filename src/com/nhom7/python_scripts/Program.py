@@ -4,6 +4,7 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.axes_grid1 import Divider, Size
+from collections import OrderedDict
 
 class Program:
     # hàm tạo
@@ -38,11 +39,12 @@ class Program:
             sensor.radius = result[3]
             self.sensor_list.append(sensor)
         file.close()
+
     # tim cac sensor co the giao tiep voi nhau
     def find_neighbors(self, source):
         for sensor in self.sensor_list:
             if source != sensor and source.distance_to_other(sensor) <= 2 * source.radius:
-                source.near_neighbors.append(sensor.index)
+                source.near_neighbors.append(sensor)
     # tim tat cac sensor co the giao tiep voi nhau trong mang
     def find_all_neighbors(self):
         for sensor in self.sensor_list:
@@ -51,46 +53,42 @@ class Program:
     # den cac sensor co the giao tiep voi no.
     def find_all_shortest_path(self):
         for i in range(1, len(self.sensor_list)):
-            self.sensor_list[i].shortest_path = self.find_shortest_path(0, i)
+            sensor = self.sensor_list[i]
+            sensor.shortest_path = self.find_shortest_path(self.sensor_list[0], sensor)
     #tim duong di ngan nhat tu sensor source den sensor destination.
     def find_shortest_path(self, sour, dest):
         # mang luu tru cac sensor sor da duyet truoc do.
-        pred = [None] * len(self.sensor_list)
-        dist = [None] * len(self.sensor_list)
-        if self.BFS(sour, dest, pred, dist) == False:
+        pred = OrderedDict()
+        if self.BFS(sour, dest, pred) == False:
             return None
         path = list()
         crawl = dest
         path.append(crawl)
-        while pred[crawl] != -1:
-            path.append(pred[crawl])
-            crawl = pred[crawl]
-        path = path[::-1]
-        return path
+        while(True):
+            try:
+                path.append(pred[crawl])
+                crawl = pred[crawl]
+            except:
+                return path[::-1]
 
     def init_data(self):
         self.find_all_neighbors()
         self.find_all_shortest_path()
     # implement BFS algorithm.
-    def BFS(self, sour, dest, pred, dist):
+    def BFS(self, sour, dest, pred):
         queue = list()
-        visited = [None] * len(self.sensor_list)
-        for i in range(len(self.sensor_list)):
-            visited[i] = False
-            dist[i] = sys.float_info.max
-            pred[i] = -1
-        visited[sour] = True
-        dist[sour] = 0
+        for sensor in self.sensor_list:
+            sensor.visited = False
+        sour.visited = True
         queue.append(sour)
 
         while len(queue) != 0:
-            u = queue.pop(0)
-            neighbors = self.sensor_list[u].near_neighbors
+            sensor = queue.pop(0)
+            neighbors = sensor.near_neighbors
             for neighbor in neighbors:
-                if visited[neighbor] == False:
-                    visited[neighbor] = True
-                    dist[neighbor] = dist[u] + 1
-                    pred[neighbor] = u
+                if neighbor.visited == False:
+                    neighbor.visited = True
+                    pred[neighbor] = sensor
                     queue.append(neighbor)
                     if neighbor == dest:
                         return True
@@ -136,7 +134,7 @@ class Program:
                     # set mau cho sink sensor.
                     drawing_sink_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#fb8500')
                 else:
-                    if sensor.index in active_sensors:
+                    if sensor in active_sensors:
                         # set mau cho sensor dich.
                         if sensor == self.sensor_list[mode]:
                             drawing_group_circle.append(plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#ffd60a'))
@@ -149,9 +147,9 @@ class Program:
                         drawing_circle_list.append(drawing_circle)
             for s in active_sensors:
                 # them cac tao do x,y va label cua tung sensor vao trong mang de ve.
-                x_values.append(self.sensor_list[s].coordinate.x)
-                y_values.append(self.sensor_list[s].coordinate.y)
-                labels.append(self.sensor_list[s].index)
+                x_values.append(s.coordinate.x)
+                y_values.append(s.coordinate.y)
+                labels.append(s.index)
             drawing_circle_list.extend(drawing_group_circle)
 
         drawing_circle_list.append(drawing_sink_circle)

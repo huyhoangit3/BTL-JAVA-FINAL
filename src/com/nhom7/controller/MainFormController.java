@@ -8,7 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -84,10 +83,10 @@ public class MainFormController {
         result.append("ĐƯỜNG ĐI NGẮN NHẤT SINK SENSOR ĐẾN TẤT CẢ CÁC\nSENSOR " +
                 "TRONG MẠNG CÓ THỂ KẾT NỐI VỚI NÓ\n");
         for (int i = 1; i < program.getNumberOfSensor(); i++) {
-            List<Integer> path = program.getSensors().get(i).getShortestPath();
+            List<Sensor> path = program.getSensors().get(i).getShortestPath();
             if (path != null) {
                 result.append("Đường đi từ sink sensor đến sensor ").append(i).append(" là: ");
-                path.forEach(x -> result.append(x).append(" "));
+                path.forEach(x -> result.append(x.getIndex()).append(" "));
                 result.append("\n");
             }
         }
@@ -116,6 +115,7 @@ public class MainFormController {
                     + "/" + program.getNumberOfSensor());
         }
     }
+
     // get list of sensor that have path to sink sensor.
     public List<Integer> getActiveSensors() {
         List<Integer> activeSensors = new ArrayList<>();
@@ -124,7 +124,7 @@ public class MainFormController {
                 activeSensors.add(sensor.getIndex());
             }
         }
-        if(!activeSensors.isEmpty())
+        if (!activeSensors.isEmpty())
             activeSensors.remove(0);
         return activeSensors;
     }

@@ -13,6 +13,7 @@ public class Program {
     private int numberOfSensor, lengthOfArea, widthOfArea;
     // list of sensors in network.
     private List<Sensor> sensors;
+
     //constructor non-args
     public Program() {
         this.numberOfSensor = 0;
@@ -20,6 +21,7 @@ public class Program {
         this.widthOfArea = 0;
         this.sensors = new ArrayList<>();
     }
+
     // init data for per sensor in network.
     public void loadData() {
         findAllNeighbors();
@@ -55,13 +57,14 @@ public class Program {
 
     /**
      * This method is used to find neighbors of sensor source.
-     * @param source - sensor want to find neighbors sensor.
+     *
+     * @param source - sensor which you want to find neighbors sensor.
      */
     public void findNeighbors(Sensor source) {
         // traverse sensor list.
         for (Sensor sensor : this.sensors) {
             if (!source.equals(sensor) && source.distanceToOther(sensor) <= 2 * Sensor.getRadius()) {
-                source.getNearNeighbors().add(sensor.getIndex());
+                source.getNearNeighbors().add(sensor);
             }
         }
     }
@@ -76,86 +79,62 @@ public class Program {
     // find all shortest path for all sensor that have path to sink sensor.
     public void findAllShortestPath() {
         for (int i = 1; i < this.numberOfSensor; i++) {
-            this.sensors.get(i).setShortestPath(findShortestPath(0, i));
+            this.sensors.get(i).setShortestPath(findShortestPath(this.sensors.get(0),
+                    this.sensors.get(i)));
         }
     }
 
     /**
      * This method is used to find shortest path from source to destination sensor.
-     * @param source - index of start sensor.
-     * @param dest - index of destination sensor.
+     *
+     * @param source - start sensor.
+     * @param dest   - destination sensor.
      * @return path from source to destination.
      */
-    public List<Integer> findShortestPath(int source, int dest) {
-        // predecessor[i] array stores predecessor of
-        // i and distance array stores distance of i
-        // from source
-        int[] pred = new int[this.sensors.size()];
-        int[] dist = new int[this.sensors.size()];
+    public List<Sensor> findShortestPath(Sensor source, Sensor dest) {
+        Map<Sensor, Sensor> pred = new LinkedHashMap<>();
 
-        if (!BFS(source, dest, pred, dist)) {
+        if (!BFS(source, dest, pred)) {
             return null;
         }
-
         // LinkedList to store path
-        List<Integer> path = new ArrayList<>();
-        int crawl = dest;
+        List<Sensor> path = new ArrayList<>();
+        Sensor crawl = dest;
         path.add(crawl);
-        while (pred[crawl] != -1) {
-            path.add(pred[crawl]);
-            crawl = pred[crawl];
+        while (pred.get(crawl) != null) {
+            path.add(pred.get(crawl));
+            crawl = pred.get(crawl);
         }
         // reverse path list.
         Collections.reverse(path);
         return path;
     }
-
     /**
      * This method implement Breadth First Search(BFS) algorithm.
-     * @param src - index of start sensor.
-     * @param dest - index of destination sensor.
-     * @param pred - array store predecessors.
-     * @param dist - array store distance from src to dest.
+     *
+     * @param src         - index of start sensor.
+     * @param destination - index of destination sensor.
+     * @param predecessor - array store predecessors.
      * @return shortest path from source to destination.
      */
-    public boolean BFS(int src, int dest, int[] pred, int[] dist) {
-        // a queue to maintain queue of vertices whose
-        // adjacency list is to be scanned as per normal
-        // BFS algorithm using LinkedList of Integer type
-        LinkedList<Integer> queue = new LinkedList<>();
-
-        // boolean array visited[] which stores the
-        // information whether ith vertex is reached
-        // at least once in the Breadth first search
-        boolean[] visited = new boolean[this.sensors.size()];
-
-        // initially all vertices are unvisited
-        // so v[i] for all i is false
-        // and as no path is yet constructed
-        // dist[i] for all i set to infinity
-        for (int i = 0; i < this.sensors.size(); i++) {
-            visited[i] = false;
-            dist[i] = Integer.MAX_VALUE;
-            pred[i] = -1;
+    public boolean BFS(Sensor src, Sensor destination, Map<Sensor, Sensor> predecessor) {
+        LinkedList<Sensor> queue = new LinkedList<>();
+        for (Sensor sensor : this.sensors) {
+            sensor.setVisited(false);
         }
-        // now source is first to be visited and
-        // distance from source to itself should be 0
-        visited[src] = true;
-        dist[src] = 0;
+        src.setVisited(true);
         queue.add(src);
         // bfs Algorithm
         while (!queue.isEmpty()) {
-            int u = queue.remove();
-            List<Integer> neighbors = this.sensors.get(u).getNearNeighbors();
-            for (Integer neighbor : neighbors) {
-                if (!visited[neighbor]) {
-                    visited[neighbor] = true;
-                    dist[neighbor] = dist[u] + 1;
-                    pred[neighbor] = u;
+            Sensor currentSensor = queue.remove();
+            List<Sensor> neighbors = currentSensor.getNearNeighbors();
+            for (Sensor neighbor : neighbors) {
+                if (!neighbor.isVisited()) {
+                    neighbor.setVisited(true);
+                    predecessor.put(neighbor, currentSensor);
                     queue.add(neighbor);
-                    // stopping condition (when we find
-                    // our destination)
-                    if (neighbor.equals(dest))
+                    // stopping condition (when we find our destination)
+                    if (neighbor.equals(destination))
                         return true;
                 }
             }
@@ -165,6 +144,7 @@ public class Program {
 
     /**
      * This method is used to read data from file and load it into sensor list.
+     *
      * @param filePath - file name will be read.
      */
     public void readFromFile(String filePath) {
@@ -218,6 +198,7 @@ public class Program {
 
     /**
      * This method is used to write data of this network to file.
+     *
      * @param filePath - file name will be write.
      */
     public void writeToFile(String filePath) {
