@@ -111,18 +111,21 @@ class Program:
                 sensor = self.sensor_list[i]
                 # set mau cho sink sensor.
                 if i == 0:
-                    drawing_sink_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#fb8500')
+                    drawing_sink_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), 
+                        sensor.radius, color='#fb8500')
                 else:
                     if sensor.shortest_path != None:
                         # set mau cho cac sensor co duong di toi sink sensor.
-                        drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#54e346')
+                        drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), 
+                            sensor.radius, color='#54e346')
                     else:
                         # set mau cho cac sensor khong co duong di toi sink sensor.
-                        drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#b7b7a4')
+                        drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), 
+                            sensor.radius, color='#b7b7a4')
                     drawing_circle_list.append(drawing_circle)
-                    x_values.append(sensor.coordinate.x)
-                    y_values.append(sensor.coordinate.y)
-                    labels.append(sensor.index)
+                x_values.append(sensor.coordinate.x)
+                y_values.append(sensor.coordinate.y)
+                labels.append(sensor.index)
         # ve duong di cu the tu 1 sensor bat ki co duong di toi sink sensor.
         else:
             # danh sach cac sensor tao thanh duong di den sink sensor.
@@ -132,18 +135,22 @@ class Program:
                 sensor = self.sensor_list[i]
                 if i == 0:
                     # set mau cho sink sensor.
-                    drawing_sink_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#fb8500')
+                    drawing_sink_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), 
+                        sensor.radius, color='#fb8500')
                 else:
                     if sensor in active_sensors:
                         # set mau cho sensor dich.
                         if sensor == self.sensor_list[mode]:
-                            drawing_group_circle.append(plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#ffd60a'))
+                            drawing_group_circle.append(plt.Circle((sensor.coordinate.x, 
+                                sensor.coordinate.y), sensor.radius, color='#ffd60a'))
                         else:
                             # set mau cho sensor nam trong duong di.
-                            drawing_group_circle.insert(0, plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#54e346'))
+                            drawing_group_circle.insert(0, plt.Circle((sensor.coordinate.x, 
+                                sensor.coordinate.y), sensor.radius, color='#54e346'))
                     else:
                         # set mau cho sensor nam trong duong di.
-                        drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), sensor.radius, color='#b7b7a4')
+                        drawing_circle = plt.Circle((sensor.coordinate.x, sensor.coordinate.y), 
+                            sensor.radius, color='#b7b7a4')
                         drawing_circle_list.append(drawing_circle)
             for s in active_sensors:
                 # them cac tao do x,y va label cua tung sensor vao trong mang de ve.
@@ -153,9 +160,6 @@ class Program:
             drawing_circle_list.extend(drawing_group_circle)
 
         drawing_circle_list.append(drawing_sink_circle)
-        x_values.append(self.sensor_list[0].coordinate.x)
-        y_values.append(self.sensor_list[0].coordinate.y)
-        labels.append(self.sensor_list[0].index)
 
         # danh sách các điểm để vẽ
         x_points = np.array(x_values)
@@ -189,6 +193,9 @@ class Program:
 
         # vẽ các điểm ứng với các tọa độ các sensor đã random không có đường nối
         plt.plot(x_points, y_points, ".")
+        if mode != 0:
+            plt.plot(x_points, y_points, color="blue")
+            
         # set giá trị limit cho trục x và y
         plt.xlim([0, xlim])
         plt.ylim([0, ylim])
