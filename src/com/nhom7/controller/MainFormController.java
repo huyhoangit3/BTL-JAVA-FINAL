@@ -61,7 +61,7 @@ public class MainFormController {
 
     public void callOtherStage() {
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().
-                getResource("..\\view\\infoForm.fxml")));
+                getResource("../view/infoForm.fxml")));
         try {
             Parent root = loader.load();
             infoFormController = loader.getController();
@@ -98,7 +98,7 @@ public class MainFormController {
         Stage stage = (Stage) ap.getScene().getWindow();
         FileChooser fc = new FileChooser();
         fc.setTitle("Choose a data set");
-        fc.setInitialDirectory(new File(System.getProperty("user.dir"), "src\\com\\nhom7\\datasets"));
+        fc.setInitialDirectory(new File(System.getProperty("user.dir"), "src/com/nhom7/datasets"));
         File file = fc.showOpenDialog(stage);
         if (file != null) {
             String fullPath = file.getAbsolutePath();

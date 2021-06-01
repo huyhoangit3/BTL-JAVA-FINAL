@@ -52,7 +52,7 @@ public class InfoFormController {
         fc.setInitialFileName("*.txt");
         fc.setTitle("Save file");
         fc.setInitialDirectory(new File(System.getProperty("user.dir"),
-                "src\\com\\nhom7\\datasets"));
+                "src/com/nhom7/datasets"));
         File file = fc.showSaveDialog(stage);
         if (file != null) {
             program.writeToFile(file.getAbsolutePath());
@@ -65,7 +65,7 @@ public class InfoFormController {
         if (filePath != null) {
             Runtime runtime = Runtime.getRuntime();
             try {
-                runtime.exec("python src\\com\\nhom7\\python_scripts\\Main.py " + this.filePath + " 0");
+                runtime.exec("python3 src/com/nhom7/python_scripts/Main.py " + this.filePath + " 0");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -84,7 +84,7 @@ public class InfoFormController {
         String index = activeSensor.getValue().toString();
         Runtime runtime = Runtime.getRuntime();
         try {
-            runtime.exec("python src\\com\\nhom7\\python_scripts\\Main.py " + this.filePath + " " + index);
+            runtime.exec("python3 src/com/nhom7/python_scripts/Main.py " + this.filePath + " " + index);
         } catch (IOException e) {
             e.printStackTrace();
         }

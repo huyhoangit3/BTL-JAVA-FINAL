@@ -112,9 +112,9 @@ public class Program {
     /**
      * This method implement Breadth First Search(BFS) algorithm.
      *
-     * @param src         - index of start sensor.
-     * @param destination - index of destination sensor.
-     * @param predecessor - array store predecessors.
+     * @param src         - start sensor.
+     * @param destination - destination sensor.
+     * @param predecessor - map to store predecessors.
      * @return shortest path from source to destination.
      */
     public boolean BFS(Sensor src, Sensor destination, Map<Sensor, Sensor> predecessor) {
