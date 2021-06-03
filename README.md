@@ -7,5 +7,5 @@ Requirement to run this project
 How to install matplotlib and numpy modules:
  - Make sure python 3 version installed on computer.
  - Open command prompt on Windows and type:
-    python -m pip install numpy
-    python -m pip install matplotlib
+    - python -m pip install numpy
+    - python -m pip install matplotlib
